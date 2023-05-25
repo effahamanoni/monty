@@ -1,15 +1,12 @@
-#ifndef __MONTY__H
-#define __MONTY__H
-
+#ifndef MONTY_H
+#define MONTY_H
 #include <stdio.h>
-#include <unistd.h>
-#include <string.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <string.h>
 #include <ctype.h>
-#include <stdarg.h>
-
-#define BUFSIZE 1024
-
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -17,7 +14,7 @@
  * @next: points to the next element of the stack (or queue)
  *
  * Description: doubly linked list node structure
- * for stack, queues, LIFO, FIFO
+ * for stack, queues, LIFO, FIFO Holberton project
  */
 typedef struct stack_s
 {
@@ -25,62 +22,58 @@ typedef struct stack_s
 	struct stack_s *prev;
 	struct stack_s *next;
 } stack_t;
-
 /**
- * struct instruction_s - opcoode and its function
+ * struct bus_s - variables -args, file, line content
+ * @arg: value
+ * @file: pointer to monty file
+ * @content: line content
+ * @lifi: flag change stack <-> queue
+ * Description: carries values through the program
+ */
+typedef struct bus_s
+{
+	char *arg;
+	FILE *file;
+	char *content;
+	int lifi;
+}  bus_t;
+extern bus_t bus;
+/**
+ * struct instruction_s - opcode and its function
  * @opcode: the opcode
  * @f: function to handle the opcode
  *
  * Description: opcode and its function
- * for stack, queues, LIFO, FIFO
+ * for stack, queues, LIFO, FIFO Holberton project
  */
 typedef struct instruction_s
 {
 	char *opcode;
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
-
-extern stack_t *head;
-/*Type definitions for opcode functions*/
-typedef void (*op_func)(stack_t **, unsigned int);
+char *_realloc(char *ptr, unsigned int old_size, unsigned int new_size);
+ssize_t getstdin(char **lineptr, int file);
+char  *clean_line(char *content);
+void _push(stack_t **head, unsigned int number);
+void _pall(stack_t **head, unsigned int number);
+void _pint(stack_t **head, unsigned int number);
+int _execute(char *content, stack_t **head, unsigned int counter, FILE *file);
+void _free_stack(stack_t *head);
+void _pop(stack_t **head, unsigned int counter);
+void _swap(stack_t **head, unsigned int counter);
+void _add(stack_t **head, unsigned int counter);
+void _nop(stack_t **head, unsigned int counter);
+void _sub(stack_t **head, unsigned int counter);
+void _div(stack_t **head, unsigned int counter);
+void _mul(stack_t **head, unsigned int counter);
+void _mod(stack_t **head, unsigned int counter);
+void _pchar(stack_t **head, unsigned int counter);
+void _pstr(stack_t **head, unsigned int counter);
+void _rotl(stack_t **head, unsigned int counter);
+void _rotr(stack_t **head, __attribute__((unused)) unsigned int counter);
+void _addnode(stack_t **head, int n);
+void _addqueue(stack_t **head, int n);
+void _queue(stack_t **head, unsigned int counter);
+void _stack(stack_t **head, unsigned int counter);
 ssize_t getline(char **lineptr, size_t *n, FILE *stream);
-
-/*operations on files*/
-void open_file(char *);
-void read_file(FILE *);
-int len_chars(FILE *);
-int interpret_line(char *, int, int);
-void find_func(char *, char *, int, int);
-
-/*perations on stacks*/
-stack_t *create_node(int n);
-void free_node(void);
-void print_stack(stack_t **, unsigned int);
-void add_to_stack(stack_t **, unsigned int);
-void add_to_queue(stack_t **, unsigned int);
-
-void call_fun(op_func, char *, char *, int, int);
-void print_top(stack_t **, unsigned int);
-void pop_top(stack_t **, unsigned int);
-void nop(stack_t **, unsigned int);
-void swap_node(stack_t **, unsigned int);
-
-/*Mathethical operations with the nodes*/
-void add_node(stack_t **, unsigned int);
-void sub_node(stack_t **, unsigned int);
-void div_node(stack_t **, unsigned int);
-void mul_node(stack_t **, unsigned int);
-void mod_node(stack_t **, unsigned int);
-
-/*operations on the strings*/
-void print_char(stack_t **, unsigned int);
-void print_str(stack_t **, unsigned int);
-void rotl(stack_t **, unsigned int);
-
-/*Error handlers*/
-void err(int error_code, ...);
-void more_err(int error_code, ...);
-void string_err(int error_code, ...);
-void rotr(stack_t **, unsigned int);
-
-#endif /*__MONTY__H*/
+#endif
